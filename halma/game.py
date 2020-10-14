@@ -27,10 +27,10 @@ class Game():
 
     def select(self, row, col):
         if self.selected:
-            result = self.move(row, col)
-            if not result:
-                self.selected = None
-                self.select(row, col)
+            result = self._move(row, col)
+            if not result: # There is a piece selected and you select another piece
+                self.selected = None #Deselect slected piece
+                self.select(row, col) #Select the new piece
 
         piece = self.board.get_piece(row, col)
         if piece != 0 and piece.color == self.turn:
@@ -39,14 +39,11 @@ class Game():
             return True
         return False
 
-    def move(self, row, col):
+    def _move(self, row, col):
         piece = self.board.get_piece(row, col)
-        if self.selected and piece == 0 and (row, col) in self.valid_moves:
-            self.board.move(self.selected, row, col)
-            skipped = self.valid_moves[(row, col)]
-            if skipped:
-                self.board.remove(skipped)
-            self.change_turn()
+        if self.selected and piece == 0 and (row, col) in self.valid_moves: #if there is a piece selected and the spot where it goes to is EMPTY ()== 0) and the move is in valid_moves
+            self.board.move(self.selected, row, col) #move the piece
+            self.change_turn() #change turn to other player
         else:
             return False
 
@@ -58,7 +55,6 @@ class Game():
             pygame.draw.circle(self.win, BLUE, (col * SQAURE_SIZE + SQAURE_SIZE//2, row * SQAURE_SIZE + SQAURE_SIZE //2), 7)
 
     def change_turn(self):
-        self.valid_moves = {}
         if self.turn == GREEN:
             self.turn = RED
         else: self.turn = GREEN

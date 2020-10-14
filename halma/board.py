@@ -6,7 +6,6 @@ from .piece import *
 class Board():
     def __init__(self):
         self.board = [[]]
-        self.red_pieces_left = self.green_pieces_left = 19
         self.create_board()
 
     def draw_grid(self, win):
@@ -46,27 +45,18 @@ class Board():
                 if piece != 0:
                     piece.draw(win)
 
-    def remove(self, pieces):
-        for piece in pieces:
-            self.board[piece.row][piece.col] = 0
-            if piece != 0:
-                if piece.color == GREEN:
-                    self.green_pieces_left -= 1
-                else:
-                    self.red_pieces_left -= 1
-
     def winner(self):
-        if self.red_pieces_left <= 0:
-            return GREEN
-        elif self.green_pieces_left <= 0:
-            return RED
+        pass
         return None
 
     def get_valid_moves(self, piece):
         moves = {}
         left = piece.col -1
-        right = piece.col + 1
+        right = piece.col +1
+        up = piece.row -1
+        down = piece.row +1
         row = piece.row
+        col = piece.col
 
         if piece.color == GREEN:
             pass
@@ -91,9 +81,7 @@ class Board():
         
         return moves
 
-    def _travel_up(self, color, skipped=[]):
+    def _travel_up(self, color, direction):
         moves = {}
-        last = []
-
         
         return moves
