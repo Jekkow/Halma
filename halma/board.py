@@ -85,7 +85,7 @@ class Board():
                 moves[(current_row_checking,col)] = current_row_checking + col
             else:
                 moves.update(self._travel_up(current_row_checking, col)) # X+1 Y
-       
+
         return moves
 
     def _travel_down(self, row, col):
@@ -99,7 +99,7 @@ class Board():
                 moves[(current_row_checking,col)] = current_row_checking + col
             else:
                 moves.update(self._travel_down(current_row_checking, col)) # X-1 Y
-       
+
         return moves
 
     def _travel_left(self, row, col):
@@ -113,7 +113,7 @@ class Board():
                 moves[(row,current_col_checking)] = row + current_col_checking
             else:
                 moves.update(self._travel_left(row, current_col_checking)) # X Y-1
-       
+
         return moves
     
     def _travel_right(self, row, col):
@@ -127,7 +127,7 @@ class Board():
                 moves[(row,current_col_checking)] = row + current_col_checking
             else:
                 moves.update(self._travel_right(row, current_col_checking)) # X Y+1
-       
+
         return moves
     
     def _travel_right_up(self, row, col):
@@ -142,7 +142,7 @@ class Board():
                 moves[(current_row_checking,current_col_checking)] = current_row_checking + current_col_checking
             else:
                 moves.update(self._travel_right_up(current_row_checking, current_col_checking)) # X-1 Y+1
-       
+
         return moves
     
     def _travel_left_up(self, row, col):
@@ -172,7 +172,7 @@ class Board():
                 moves[(current_row_checking,current_col_checking)] = current_row_checking + current_col_checking
             else:
                 moves.update(self._travel_left_down(current_row_checking, current_col_checking)) # X+1 Y-1
-       
+
         return moves
     
     def _travel_right_down(self, row, col):
@@ -187,5 +187,5 @@ class Board():
                 moves[(current_row_checking,current_col_checking)] = current_row_checking + current_col_checking
             else:
                 moves.update(self._travel_right_down(current_row_checking, current_col_checking)) # X+1 Y+1
-       
+
         return moves
