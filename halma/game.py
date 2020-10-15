@@ -55,6 +55,7 @@ class Game():
             pygame.draw.circle(self.win, BLUE, (col * SQAURE_SIZE + SQAURE_SIZE//2, row * SQAURE_SIZE + SQAURE_SIZE //2), 7)
 
     def change_turn(self):
+        self.valid_moves = {}
         if self.turn == GREEN:
             self.turn = RED
         else: self.turn = GREEN

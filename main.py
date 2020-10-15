@@ -34,4 +34,6 @@ def main():
 
         game.update()
     pygame.quit()
+
+
 main()
