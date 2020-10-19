@@ -2,6 +2,7 @@ import pygame
 from halma.constants import *
 from halma.board import Board
 from halma.game import Game
+import sys
 
 FPS = 60
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -17,8 +18,10 @@ def main():
     run = True
     clock = pygame.time.Clock()
     game = Game(WINDOW)
+    sys.setrecursionlimit(100000000)
 
     while run:
+
         clock.tick(FPS)
         
         if game.winner() != None:
@@ -34,6 +37,7 @@ def main():
 
         game.update()
     pygame.quit()
+
 
 
 main()

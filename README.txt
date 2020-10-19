@@ -8,6 +8,9 @@ bart6446
 DevYouriD
 marochemelnoy
 
+## Play the game
+Run the main.py file
+
 ## Objective
 The aim of the game is to be the first player to move all pieces across the board into the opposing corner.
 
