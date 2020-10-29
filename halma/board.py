@@ -4,8 +4,10 @@ from .piece import *
 
 
 class Board():
-    def __init__(self):
+    def __init__(self,):
         self.board = [[]]
+        self.red_pieces_in_goal = 0
+        self.green_pieces_in_goal = 0
         self.create_board()
 
     def draw_grid(self, win):
@@ -19,7 +21,15 @@ class Board():
         piece.move(row, col)
 
     def get_piece(self, row, col):
-        return self.board[row][col]   
+        return self.board[row][col]
+
+    def get_all_pieces(self, color):
+        pieces = []
+        for row in self.board:
+            for piece in row:
+                if piece != 0 and piece.color == color:
+                    pieces.append(piece)
+        return pieces
 
     def create_board(self):
         for row in range(ROWS):
@@ -31,11 +41,11 @@ class Board():
         for position in location_AI:
             x = position[0]
             y = position[1]
-            self.board[x][y] = Piece(x, y, RED, 2)
+            self.board[x][y] = Piece(x, y, RED)
         for position in location_Player:
             x = position[0]
             y = position[1]
-            self.board[x][y] = Piece(x, y, GREEN, 1)
+            self.board[x][y] = Piece(x, y, GREEN)
     
     def draw(self, win):
         self.draw_grid(win)
@@ -46,7 +56,23 @@ class Board():
                     piece.draw(win)
 
     def winner(self):
-        pass
+        pieces = []
+        self.green_pieces_in_goal = 0
+        self.red_pieces_in_goal = 0
+        pieces = self.get_all_pieces(GREEN) #if player are in position of ai return GREEN
+        for piece in pieces:
+            if [piece.row,piece.col] in location_AI:
+                self.green_pieces_in_goal = self.green_pieces_in_goal + 1
+        pieces = self.get_all_pieces(RED) #if Ai are in position of player return RED
+        for piece in pieces:
+            if [piece.row, piece.col] in location_Player:
+                self.red_pieces_in_goal = self.red_pieces_in_goal + 1
+        
+        print("Red pieces in goal: ", self.red_pieces_in_goal, " Green pieces in goal: ", self.green_pieces_in_goal)
+        if self.green_pieces_in_goal == 19:
+            return GREEN
+        elif self.red_pieces_in_goal == 19:
+            return RED
         return None
 
     def get_valid_moves(self, piece):
@@ -94,7 +120,7 @@ class Board():
                         moves.update(self._travel_up(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X+1 Y
                         moves.update(self._travel_right(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y+1
                         moves.update(self._travel_left(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0 and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_up(moves, current_row_checking, col, previous_positions, jumped, ignore_empty))
@@ -115,7 +141,7 @@ class Board():
                             moves.update(self._travel_up(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X+1 Y
                             moves.update(self._travel_right(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y+1
                             moves.update(self._travel_left(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0 and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_up(moves, current_row_checking, col, previous_positions, jumped, ignore_empty))
@@ -141,7 +167,7 @@ class Board():
                         moves.update(self._travel_down(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X-1 Y
                         moves.update(self._travel_right(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y+1
                         moves.update(self._travel_left(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0  and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_down(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -162,7 +188,7 @@ class Board():
                             moves.update(self._travel_down(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X-1 Y
                             moves.update(self._travel_right(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y+1
                             moves.update(self._travel_left(moves, current_row_checking, col, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0  and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_down(moves, current_row_checking, col, previous_positions, jumped, ignore_empty))
@@ -189,7 +215,7 @@ class Board():
                         moves.update(self._travel_down(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                         #moves.update(self._travel_right(row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                         moves.update(self._travel_left(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0 and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_left(moves, row, current_col_checking, previous_positions, jumped, ignore_empty))
@@ -211,7 +237,7 @@ class Board():
                             moves.update(self._travel_down(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                             #moves.update(self._travel_right(row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                             moves.update(self._travel_left(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0 and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_left(moves, row, current_col_checking, previous_positions, jumped, ignore_empty))
@@ -239,7 +265,7 @@ class Board():
                         moves.update(self._travel_down(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                         moves.update(self._travel_right(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                         #moves.update(self._travel_left(row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0 and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_right(moves, row, current_col_checking, previous_positions, jumped, ignore_empty))
@@ -261,7 +287,7 @@ class Board():
                             moves.update(self._travel_down(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                             moves.update(self._travel_right(moves, row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                             #moves.update(self._travel_left(row, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0 and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_right(moves, row, current_col_checking, previous_positions, jumped, ignore_empty))
@@ -289,7 +315,7 @@ class Board():
                         moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                         moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                         moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0 and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_right_up(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -311,7 +337,7 @@ class Board():
                             moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                             moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                             moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0 and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_right_up(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -340,7 +366,7 @@ class Board():
                         moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                         moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                         moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0 and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_left_up(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -362,7 +388,7 @@ class Board():
                             moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                             moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                             moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0 and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_left_up(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -391,7 +417,7 @@ class Board():
                         moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                         moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                         moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0 and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_left_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -413,7 +439,7 @@ class Board():
                             moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                             moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                             moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0 and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_left_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -442,7 +468,7 @@ class Board():
                         moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                         moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                         moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                elif(current_spot_checking != 0):
+                elif(current_spot_checking != 0 and not jumped):
                     jumped = True
                     ignore_empty = False
                     moves.update(self._travel_right_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y
@@ -464,7 +490,7 @@ class Board():
                             moves.update(self._travel_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X-1 Y
                             moves.update(self._travel_right(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y+1
                             moves.update(self._travel_left(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X Y-1
-                    elif(current_spot_checking != 0):
+                    elif(current_spot_checking != 0 and not jumped):
                         jumped = True
                         ignore_empty = False
                         moves.update(self._travel_right_down(moves, current_row_checking, current_col_checking, previous_positions, jumped, ignore_empty)) # X+1 Y

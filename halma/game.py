@@ -4,9 +4,10 @@ from .board import *
 
 
 class Game():
-    def __init__(self, win):
+    def __init__(self, win, moves_played):
         self._init()
         self.win = win
+        self.moves_played = moves_played
 
     def update(self):
         self.board.draw(self.win)
@@ -21,6 +22,9 @@ class Game():
 
     def winner(self):
         return self.board.winner()
+    
+    def moves_played(self):
+        return self.moves_played
 
     def reset(self):
         self._init()
@@ -59,3 +63,6 @@ class Game():
         if self.turn == GREEN:
             self.turn = RED
         else: self.turn = GREEN
+
+    def get_board(self):
+        return self.get_board

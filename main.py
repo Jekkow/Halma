@@ -1,8 +1,8 @@
 import pygame
+from pygame.display import set_caption
 from halma.constants import *
 from halma.board import Board
 from halma.game import Game
-import sys
 
 FPS = 60
 WINDOW = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -14,18 +14,27 @@ def get_row_col_from_mouse(pos):
     col = x // SQAURE_SIZE
     return row, col
 
+def result(gameWinner):
+    pass
+    
+
 def main():
     run = True
     clock = pygame.time.Clock()
-    game = Game(WINDOW)
-    sys.setrecursionlimit(100000000)
+    game = Game(WINDOW, 0)
 
     while run:
 
         clock.tick(FPS)
         
-        if game.winner() != None:
-            print(game.winner())
+        if game.turn == RED:
+            pass #AI turn
+        
+        gameWinner = game.winner()
+        print(gameWinner)
+        if gameWinner != None:
+            result(gameWinner)
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -36,8 +45,6 @@ def main():
                 game.select(row, col)
 
         game.update()
-    pygame.quit()
-
-
+    pygame.quit() ## Open new window with Win or Loose
 
 main()

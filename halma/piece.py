@@ -5,11 +5,10 @@ class Piece:
     PADDING = 6
     OUTLINE = 2
 
-    def __init__(self, row, col, color, value):
+    def __init__(self, row, col, color):
         self.row = row
         self.col = col
         self.color = color
-        self.value = value
       
         self.x = 0
         self.y = 0
