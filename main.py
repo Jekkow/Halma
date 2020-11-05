@@ -15,8 +15,23 @@ def get_row_col_from_mouse(pos):
     return row, col
 
 def result(gameWinner):
-    pass
-    
+    run = False
+    resultDisplay = pygame.display.set_mode((WIDTH, HEIGHT))
+    resultDisplay.fill(WHITE)
+    if(gameWinner == GREEN):
+        pygame.display.set_caption("You Won")
+    elif(gameWinner == RED):
+        pygame.display.set_caption("You Lost")
+    resultDisplay.blit(0,0)
+    pygame.display.flip()
+    pygame.display.update()
+
+    end_menu_running = True
+
+    while end_menu_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    end_menu_running = False
 
 def main():
     run = True

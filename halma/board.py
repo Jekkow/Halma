@@ -55,7 +55,20 @@ class Board():
                 if piece != 0:
                     piece.draw(win)
 
-    def winner(self):
+    def winner(self, moves_played):
+        # Check if player has stones in own field after 50 moves
+        if moves_played >= 50:
+            pieces = []
+            pieces = self.get_all_pieces(GREEN)
+            for piece in pieces:
+                if[piece.row,piece.col] in location_Player:
+                    return RED
+            pieces = self.get_all_pieces(RED)
+            for piece in pieces:
+                if[piece.row,piece.col] in location_AI:
+                    return GREEN
+        
+        # Check winner based on position in goal
         pieces = []
         self.green_pieces_in_goal = 0
         self.red_pieces_in_goal = 0
@@ -67,8 +80,7 @@ class Board():
         for piece in pieces:
             if [piece.row, piece.col] in location_Player:
                 self.red_pieces_in_goal = self.red_pieces_in_goal + 1
-        
-        print("Red pieces in goal: ", self.red_pieces_in_goal, " Green pieces in goal: ", self.green_pieces_in_goal)
+
         if self.green_pieces_in_goal == 19:
             return GREEN
         elif self.red_pieces_in_goal == 19:

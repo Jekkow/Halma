@@ -21,7 +21,7 @@ class Game():
         self.valid_moves = {}
 
     def winner(self):
-        return self.board.winner()
+        return self.board.winner(moves_played)
     
     def moves_played(self):
         return self.moves_played
@@ -63,6 +63,7 @@ class Game():
         if self.turn == GREEN:
             self.turn = RED
         else: self.turn = GREEN
+        self.moves_played += 1
 
     def get_board(self):
         return self.get_board
