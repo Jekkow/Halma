@@ -21,7 +21,7 @@ class Game():
         self.valid_moves = {}
 
     def winner(self):
-        return self.board.winner(moves_played)
+        return self.board.winner(self.moves_played)
     
     def moves_played(self):
         return self.moves_played
