@@ -56,6 +56,10 @@ class Board():
                     piece.draw(win)
 
     def winner(self, moves_played):
+        # Remise rule
+        if moves_played >= 80:
+            return "remise"
+
         # Check if player has stones in own field after 50 moves
         if moves_played >= 50:
             pieces = []

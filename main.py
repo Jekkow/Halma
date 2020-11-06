@@ -22,6 +22,8 @@ def result(gameWinner):
         pygame.display.set_caption("You Won")
     elif(gameWinner == RED):
         pygame.display.set_caption("You Lost")
+    elif(gameWinner == "remise"):
+        pygame.display.set_caption("It's a tie")
     resultDisplay.blit(0,0)
     pygame.display.flip()
     pygame.display.update()
